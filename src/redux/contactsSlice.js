@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { fetchContacts } from './contactsOperations';
 
 const API_URL = 'https://65a51c5a52f07a8b4a3e5f05.mockapi.io/contacts';
 
