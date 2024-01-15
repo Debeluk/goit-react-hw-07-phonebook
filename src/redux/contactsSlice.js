@@ -1,17 +1,67 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { fetchContacts } from './contactsOperations';
+
+const API_URL = 'https://65a51c5a52f07a8b4a3e5f05.mockapi.io/contacts';
+
+export const fetchContacts = createAsyncThunk(
+  'contacts/fetchContacts',
+  async () => {
+    const response = await fetch(API_URL);
+    return response.json();
+  }
+);
+
+export const addContact = createAsyncThunk(
+  'contacts/addContact',
+  async (contactData) => {
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(contactData),
+    });
+    return response.json();
+  }
+);
+
+export const deleteContact = createAsyncThunk(
+  'contacts/deleteContact',
+  async (contactId) => {
+    await fetch(`${API_URL}/${contactId}`, {
+      method: 'DELETE',
+    });
+    return contactId;
+  }
+);
 
 const contactsSlice = createSlice({
   name: 'contacts',
-  initialState: [],
-  reducers: {
-    addContact: (state, action) => {
-      state.push(action.payload);
+  initialState: {
+    items: [],
+    isLoading: false,
+    error: null
+  },
+  reducers: {},
+  extraReducers: {
+    [fetchContacts.pending]: (state) => {
+      state.isLoading = true;
     },
-    deleteContact: (state, action) => {
-      return state.filter(contact => contact.id !== action.payload);
-    }
-  }
+    [fetchContacts.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.items = action.payload;
+    },
+    [fetchContacts.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.error.message;
+    },
+    [addContact.fulfilled]: (state, action) => {
+      state.items.push(action.payload);
+    },
+    [deleteContact.fulfilled]: (state, action) => {
+      state.items = state.items.filter(contact => contact.id !== action.payload);
+    },
+  },
 });
 
-export const { addContact, deleteContact } = contactsSlice.actions;
 export default contactsSlice.reducer;
