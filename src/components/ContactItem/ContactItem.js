@@ -1,8 +1,8 @@
 import React from 'react';
 
-const ContactItem = ({ name, number, onDelete }) => (
+const ContactItem = ({ name, phone, onDelete }) => (
   <li>
-    {name}: {number}
+    {name}: {phone}
     <button onClick={onDelete} style={{ marginLeft: '10px' }}>Delete</button>
   </li>
 );
