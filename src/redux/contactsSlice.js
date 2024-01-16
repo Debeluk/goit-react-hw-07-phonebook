@@ -15,6 +15,7 @@ export const fetchContacts = createAsyncThunk(
       }
 
       const data = await response.json();
+      console.log('Fetched contacts:', data);
       return data;
     } catch (error) {
       throw error;
