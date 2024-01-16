@@ -5,7 +5,11 @@ import { deleteContact } from '../../redux/contactsSlice';
 
 const ContactList = () => {
   const dispatch = useDispatch();
-  const { items: contacts, isLoading, error } = useSelector(state => state.contacts);
+  const {
+    items: contacts,
+    isLoading,
+    error,
+  } = useSelector(state => state.contacts);
   const filter = useSelector(state => state.filter);
 
   const getVisibleContacts = () => {

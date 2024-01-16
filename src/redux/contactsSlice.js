@@ -5,14 +5,26 @@ const API_URL = 'https://65a51c5a52f07a8b4a3e5f05.mockapi.io/contacts';
 export const fetchContacts = createAsyncThunk(
   'contacts/fetchContacts',
   async () => {
-    const response = await fetch(API_URL);
-    return response.json();
+    try {
+      const response = await fetch(API_URL, {
+        method: 'GET',
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      throw error;
+    }
   }
 );
 
 export const addContact = createAsyncThunk(
   'contacts/addContact',
-  async (contactData) => {
+  async contactData => {
     const response = await fetch(API_URL, {
       method: 'POST',
       headers: {
@@ -26,7 +38,7 @@ export const addContact = createAsyncThunk(
 
 export const deleteContact = createAsyncThunk(
   'contacts/deleteContact',
-  async (contactId) => {
+  async contactId => {
     await fetch(`${API_URL}/${contactId}`, {
       method: 'DELETE',
     });
@@ -39,11 +51,11 @@ const contactsSlice = createSlice({
   initialState: {
     items: [],
     isLoading: false,
-    error: null
+    error: null,
   },
   reducers: {},
   extraReducers: {
-    [fetchContacts.pending]: (state) => {
+    [fetchContacts.pending]: state => {
       state.isLoading = true;
     },
     [fetchContacts.fulfilled]: (state, action) => {
@@ -58,7 +70,9 @@ const contactsSlice = createSlice({
       state.items.push(action.payload);
     },
     [deleteContact.fulfilled]: (state, action) => {
-      state.items = state.items.filter(contact => contact.id !== action.payload);
+      state.items = state.items.filter(
+        contact => contact.id !== action.payload
+      );
     },
   },
 });
