@@ -4,23 +4,23 @@ import { addContact } from '../../redux/contactsSlice';
 
 const ContactForm = () => {
   const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+  const [phone, setPhone] = useState('');
   const dispatch = useDispatch();
 
   const handleChange = event => {
     const { name, value } = event.target;
     if (name === 'name') {
       setName(value);
-    } else if (name === 'number') {
-      setNumber(value);
+    } else if (name === 'phone') {
+      setPhone(value);
     }
   };
 
   const handleSubmit = event => {
     event.preventDefault();
-    dispatch(addContact({ name, number }));
+    dispatch(addContact({ name, phone }));
     setName('');
-    setNumber('');
+    setPhone('');
   };
 
   return (
@@ -36,11 +36,11 @@ const ContactForm = () => {
         />
       </label>
       <label>
-        Number:
+        Phone:
         <input
           type="tel"
-          name="number"
-          value={number}
+          name="phone"
+          value={phone}
           onChange={handleChange}
           required
         />
