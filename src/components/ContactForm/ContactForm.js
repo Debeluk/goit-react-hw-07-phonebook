@@ -27,7 +27,7 @@ const ContactForm = () => {
     );
 
     if (isDuplicate) {
-      alert('This contact already exists');
+      alert('Contact with the same name or phone number already exists');
       return;
     }
 

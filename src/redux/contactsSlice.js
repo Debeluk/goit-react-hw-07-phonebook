@@ -25,7 +25,7 @@ export const fetchContacts = createAsyncThunk(
 
 export const addContact = createAsyncThunk(
   'contacts/addContact',
-  async (contactData, { getState }) => {
+  async contactData => {
     const response = await fetch(API_URL, {
       method: 'POST',
       headers: {
@@ -33,21 +33,7 @@ export const addContact = createAsyncThunk(
       },
       body: JSON.stringify(contactData),
     });
-
-    const data = await response.json();
-
-    const state = getState();
-    const isUnique = state.contacts.items.every(contact => {
-      return contact.name !== data.name && contact.phone !== data.phone;
-    });
-
-    if (!isUnique) {
-      throw new Error(
-        'Contact with the same name or phone number already exists.'
-      );
-    }
-
-    return data;
+    return response.json();
   }
 );
 
